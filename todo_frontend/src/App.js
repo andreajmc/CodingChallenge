@@ -1,77 +1,83 @@
 import React, { useState, useEffect } from "react"
-import "./App.css"
 import APIHelper from "./APIHelper.js"
+import ReactDOM from "react-dom";
+import { useInputValue, useTodos } from "./custom-hooks";
+import Layout from "./components/Layout";
+import AddTodo from "./components/AddTodo";
+import TodoList from "./components/TodoList";
+import { Button, ButtonGroup } from "@material-ui/core";
 
 function App() {
-  const [todos, setTodos] = useState([])
-  const [todo, setTodo] = useState("")
+  const [todolist, settodolist] = useState([])
+  const [inputTask, setinputTask] = useState("")
 
   useEffect(() => {
-    const fetchTodoAndSetTodos = async () => {
-      const todos = await APIHelper.getAllTodos()
-      setTodos(todos)
+    const fetchinputTaskAndSettodolist = async () => {
+      const todolist = await APIHelper.getTodoList()
+      settodolist(todolist)
     }
-    fetchTodoAndSetTodos()
+    fetchinputTaskAndSettodolist()
   }, [])
 
-  const createTodo = async e => {
+  const createinputTask = async e => {
     e.preventDefault()
-    if (!todo) {
+    if (!inputTask) {
       alert("please enter something")
       return
     }
-    if (todos.some(({ task }) => task === todo)) {
-      alert(`Task: ${todo} already exists`)
+    if (todolist.some(({ task }) => task === inputTask)) {
+      alert(`Task: ${inputTask} already exists`)
       return
     }
-    const newTodo = await APIHelper.createTodo(todo)
-    setTodos([...todos, newTodo])
+    const newinputTask = await APIHelper.createinputTask(inputTask)
+    settodolist([...todolist, newinputTask])
   }
 
-  const deleteTodo = async (e, id) => {
+  const deleteinputTask = async (e, id) => {
     try {
       e.stopPropagation()
-      await APIHelper.deleteTodo(id)
-      setTodos(todos.filter(({ _id: i }) => id !== i))
-    } catch (err) {}
+      await APIHelper.deleteinputTask(id)
+      settodolist(todolist.filter(({ _id: i }) => id !== i))
+    } catch (err) { }
   }
 
-  const updateTodo = async (e, id) => {
+  const updateinputTask = async (e, id) => {
     e.stopPropagation()
     const payload = {
-      completed: !todos.find(todo => todo._id === id).completed,
+      completed: !todolist.find(inputTask => inputTask._id === id).completed,
     }
-    const updatedTodo = await APIHelper.updateTodo(id, payload)
-    setTodos(todos.map(todo => (todo._id === id ? updatedTodo : todo)))
+    const updatedinputTask = await APIHelper.updateinputTask(id, payload)
+    settodolist(todolist.map(inputTask => (inputTask._id === id ? updatedinputTask : inputTask)))
   }
 
-  return (
-    <div className="App">
-      <div>
-        <input
-          id="todo-input"
-          type="text"
-          value={todo}
-          onChange={({ target }) => setTodo(target.value)}
-        />
-        <button type="button" onClick={createTodo}>
-          Add
-        </button>
-      </div>
+  const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
+  const { todos, addTodo, checkTodo, removeTodo } = useTodos();
 
-      <ul>
-        {todos.map(({ _id, task, completed }, i) => (
-          <li
-            key={i}
-            onClick={e => updateTodo(e, _id)}
-            className={completed ? "completed" : ""}
-          >
-            {task} <span onClick={e => deleteTodo(e, _id)}>X</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
+  const clearInputAndAddTodo = () => {
+    clearInput();
+    addTodo(inputValue);
+  };
+
+  return (
+    <Layout>
+      <AddTodo
+        inputValue={inputValue}
+        onInputChange={changeInput}
+        onButtonClick={clearInputAndAddTodo}
+        onInputKeyPress={(event) => keyInput(event, clearInputAndAddTodo)}
+      />
+      <TodoList
+        items={todos}
+        onItemCheck={checkTodo}
+        onItemRemove={removeTodo}
+      />
+      <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
+        <Button>Clear Selected</Button>
+        <Button>Clear All</Button>
+      </ButtonGroup>
+    </Layout>
+  );
+};
+
 
 export default App
