@@ -51,7 +51,7 @@ function App() {
   }
 
   const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
-  const { todos, addTodo, checkTodo, removeTodo } = useTodos();
+  const { todos, addTodo, checkTodo, removeTodo, editTodo } = useTodos();
 
   const clearInputAndAddTodo = () => {
     clearInput();
@@ -70,6 +70,7 @@ function App() {
         items={todos}
         onItemCheck={checkTodo}
         onItemRemove={removeTodo}
+        onItemEdit={editTodo}
       />
       <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
         <Button>Clear Selected</Button>

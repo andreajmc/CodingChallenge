@@ -44,6 +44,9 @@ export const useTodos = (initialValue = []) => {
     },
     removeTodo: (idx) => {
       setTodos(todos.filter((_, index) => idx !== index));
+    },
+    editTodo: (idx) => {
+      // here goes something
     }
   };
 };
