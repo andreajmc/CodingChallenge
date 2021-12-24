@@ -19,7 +19,6 @@ app.get("/tasks", async (req, res, next) => { // List all tasks in the To Do Lis
         return success(res, tasks)
     } catch (err) {
         next({ status: 400, message: "Failed to get tasks in the To-Do List." })
-        console.log(err)
     }
 })
 
@@ -29,6 +28,7 @@ app.post("/tasks", async (req, res, next) => { // Create new task in list.
         return success(res, task);
     } catch (err) {
         next({ status: 400, message: "Failed to create task in To-Do List." })
+        console.log(err)
     }
 })
 
