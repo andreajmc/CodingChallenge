@@ -7,16 +7,16 @@ import TodoList from "./components/TodoList";
 import { Button, ButtonGroup } from "@material-ui/core";
 
 function App() {
-  const [todolist, settodolist] = useState([])
-  //const [inputTask, setinputTask] = useState("")
+
+  const [todolist, setTodoList] = useState({});
 
   useEffect(() => {
     const fetchinputTaskAndSettodolist = async () => {
-      const todolist = await APIHelper.getTodoList()
-      settodolist(todolist)
+      const newtodolist = await APIHelper.getTodoList()
+      setTodoList(newtodolist)
     }
     fetchinputTaskAndSettodolist()
-  }, [])
+  })
 
   const createinputTask = async (inputTask) => {
     if (!inputTask) {
@@ -24,21 +24,22 @@ function App() {
       alert("Please write down a task to add.")
       return
     }
-
     if (todolist.some(t => t.todo === inputTask)) {
       alert(`This task already exists!`)
       return
+    } else {
+      console.log(todolist)
+      const newinputTask = await APIHelper.createinputTask(inputTask)
+      todolist.push(newinputTask)
+      return
     }
-    console.log(todolist)
-    const newinputTask = await APIHelper.createinputTask(inputTask)
-    settodolist([...todolist, newinputTask])
   }
 
   const deleteinputTask = async (e, id) => {
     try {
       e.stopPropagation()
       await APIHelper.deleteinputTask(id)
-      settodolist(todolist.filter(({ _id: i }) => id !== i))
+      // settodolist(todolist.filter(({ _id: i }) => id !== i))
     } catch (err) { }
   }
 
@@ -48,7 +49,7 @@ function App() {
       completed: !todolist.find(inputTask => inputTask._id === id).completed,
     }
     const updatedinputTask = await APIHelper.updateinputTask(id, payload)
-    settodolist(todolist.map(inputTask => (inputTask._id === id ? updatedinputTask : inputTask)))
+    // settodolist(todolist.map(inputTask => (inputTask._id === id ? updatedinputTask : inputTask)))
   }
 
   const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
@@ -56,8 +57,8 @@ function App() {
 
   const clearInputAndAddTodo = () => {
     clearInput();
+    if(createinputTask(inputValue) )
     addTodo(inputValue);
-    createinputTask(inputValue);
   };
 
   return (
