@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import APIHelper from "./APIHelper.js"
-import ReactDOM from "react-dom";
 import { useInputValue, useTodos } from "./custom-hooks";
 import Layout from "./components/Layout";
 import AddTodo from "./components/AddTodo";
@@ -9,7 +8,7 @@ import { Button, ButtonGroup } from "@material-ui/core";
 
 function App() {
   const [todolist, settodolist] = useState([])
-  const [inputTask, setinputTask] = useState("")
+  //const [inputTask, setinputTask] = useState("")
 
   useEffect(() => {
     const fetchinputTaskAndSettodolist = async () => {
@@ -19,16 +18,18 @@ function App() {
     fetchinputTaskAndSettodolist()
   }, [])
 
-  const createinputTask = async e => {
-    e.preventDefault()
+  const createinputTask = async (inputTask) => {
     if (!inputTask) {
-      alert("please enter something")
+      console.log("its empty")
+      alert("Please write down a task to add.")
       return
     }
-    if (todolist.some(({ task }) => task === inputTask)) {
-      alert(`Task: ${inputTask} already exists`)
+
+    if (todolist.some(t => t.todo === inputTask)) {
+      alert(`This task already exists!`)
       return
     }
+    console.log(todolist)
     const newinputTask = await APIHelper.createinputTask(inputTask)
     settodolist([...todolist, newinputTask])
   }
@@ -56,6 +57,7 @@ function App() {
   const clearInputAndAddTodo = () => {
     clearInput();
     addTodo(inputValue);
+    createinputTask(inputValue);
   };
 
   return (
