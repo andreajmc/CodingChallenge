@@ -9,6 +9,7 @@ import { Button, ButtonGroup } from "@material-ui/core";
 function App() {
 
   const [todolist, setTodoList] = useState({});
+  
 
   useEffect(() => {
     const fetchinputTaskAndSettodolist = async () => {
@@ -24,22 +25,23 @@ function App() {
       alert("Please write down a task to add.")
       return
     }
-    if (todolist.some(t => t.todo === inputTask)) {
+    /*if (todolist.some(t => t.todo === inputTask)) {
       alert(`This task already exists!`)
       return
-    } else {
+    } else {*/
       console.log(todolist)
       const newinputTask = await APIHelper.createinputTask(inputTask)
       todolist.push(newinputTask)
       return
-    }
+    // }
   }
 
-  const deleteinputTask = async (e, id) => {
+  const deleteinputTask = async (idx) => {
     try {
-      e.stopPropagation()
+      const id = todolist[idx]._id;
+      console.log(id)
       await APIHelper.deleteinputTask(id)
-      // settodolist(todolist.filter(({ _id: i }) => id !== i))
+      setTodoList(todolist.filter(({ _id: i }) => id !== i))
     } catch (err) { }
   }
 
@@ -57,9 +59,14 @@ function App() {
 
   const clearInputAndAddTodo = () => {
     clearInput();
-    if(createinputTask(inputValue) )
+    createinputTask(inputValue);
     addTodo(inputValue);
   };
+
+  const removeTodos = (idx) => {
+    removeTodo(idx);
+    deleteinputTask(idx);
+  }
 
   return (
     <Layout>
@@ -72,7 +79,7 @@ function App() {
       <TodoList
         items={todos}
         onItemCheck={checkTodo}
-        onItemRemove={removeTodo}
+        onItemRemove={removeTodos}
         onItemEdit={editTodo}
       />
       <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
