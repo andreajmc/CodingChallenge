@@ -1,6 +1,8 @@
 import { useState } from "react";
 
-export const useInputValue = (initialValue = "") => {
+// Custom hooks created to handle the front end.
+
+export const useInputValue = (initialValue = "") => { // initializing text box values w empty strings.
   const [inputValue, setInputValue] = useState(initialValue);
   const [inputModValue, setInputModValue] = useState(initialValue);
 
@@ -20,13 +22,14 @@ export const useInputValue = (initialValue = "") => {
   };
 };
 
+// handling CRUDS in front end
 export const useTodos = (initialValue = []) => {
   var [todos, setTodos] = useState(initialValue);
 
   return {
     todos,
     addTodo: (text, status) => {
-      if (text !== "") {
+      if (text !== "") { // Checking that the item is not empty.
         setTodos(
           todos.concat({
             text,

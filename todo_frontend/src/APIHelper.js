@@ -1,11 +1,13 @@
 import axios from "axios"
 
-const API_URL = "http://localhost:3000/tasks/"
+const API_URL = "http://localhost:3000/tasks/" // our frontend runs on Port 3001 while our backend runs on port 3000.
+
+// The methods here call out to our API to perform the desired action in the DB.
 
 async function createinputTask(task) {
   const { data: newTodo } = await axios.post(API_URL, {
     todo: task,
-    finished: 'false'
+    finished: 'false' // the default state for a task is pending or unchecked.
   })
   return newTodo
 }
@@ -15,7 +17,7 @@ async function deleteinputTask(id) {
   return message
 }
 
-async function updateinputState(id, toggle) {
+async function updateinputState(id, toggle) { // toggle between checked and unchecked
   console.log(toggle)
   if (toggle) {
     await axios.put(`${API_URL}${id}`, { finished: false })

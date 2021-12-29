@@ -8,6 +8,7 @@ const TodoList = React.memo(({ items, onItemCheck, onItemRemove, onItemUpdate })
     {items.length > 0 && (
       <Paper style={{ margin: 16 }}>
         <List style={{ overflow: "auto" }}>
+          {/* Mapping existing items based on the items on the db*/}
           {items.map((todo, idx) => (
             <TodoListItem
               {...todo}
