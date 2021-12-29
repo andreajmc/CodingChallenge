@@ -6,7 +6,7 @@ const taskSchema = new mongoose.Schema({
     required: true
   },
   finished: {
-    type: Boolean, // it is a boolean
+    type: Boolean, // stae of the task which is a boolean
     default: false
   },
 });
