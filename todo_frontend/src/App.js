@@ -78,7 +78,7 @@ function App() {
   }
 
   const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
-  const { todos, addTodo, checkTodo, removeTodo, editTodo, listTodos } = useTodos();
+  const { addTodo, checkTodo, removeTodo, editTodo } = useTodos();
 
   const clearInputAndAddTodo = () => {
     clearInput();
@@ -93,6 +93,20 @@ function App() {
   const editTodos = (idx, text) => {
     editTodo(idx, text)
     updateinputTask(idx, text)
+  }
+
+  const clearAll = () => {
+    for (var i = 0; i < todolist.length; i++) {
+      removeTodos(i);
+    }
+  }
+
+  const clearSel = () => {
+    for (var i = 0; i < todolist.length; i++) {
+      console.log(todolist[i].finished)
+      if (todolist[i].finished)
+        removeTodos(i);
+    }
   }
 
   return (
@@ -110,8 +124,8 @@ function App() {
         onItemEdit={editTodos}
       />
       <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
-        <Button>Clear Selected</Button>
-        <Button>Clear All</Button>
+        <Button onClick={clearSel}>Clear Selected</Button>
+        <Button onClick={clearAll}>Clear All</Button>
       </ButtonGroup>
     </Layout>
   );
