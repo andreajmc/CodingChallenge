@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
-mongoose.connect("mongodb://127.0.0.1:27017/todolist", {
-  // connecting to the mongodb database name: "todolist" locally
+require('dotenv').config({path: 'variables.env'});
+mongoose.connect(process.env.DB_URL, {
+  // connecting to the mongodb database 
   keepAlive: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,

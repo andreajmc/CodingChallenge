@@ -2,8 +2,10 @@ const express = require("express"); //  express server
 const app = express(); // app object
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
 const db = require("./models/");
 const cors = require("cors");
+
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -57,6 +59,6 @@ app.use((err, req, res, next) => {
     })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
     console.log(`listening on port ${PORT}`) // server started
 })
