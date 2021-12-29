@@ -77,7 +77,6 @@ function App() {
     try {
       const id = todolist[idx]._id;
       const modTask = await APIHelper.updateinputTask(id, newTodo)
-      console.log("modtask", modTask)
       setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))
     } catch (err) {
     }
@@ -86,7 +85,6 @@ function App() {
   // change a task's state from unchecked to checked or vice versa
   const updateinputState = async (idx) => {
     const id = todolist[idx]._id;
-    console.log("idx", idx, "id", id, "check:", todolist[idx].finished)
     await APIHelper.updateinputState(id, todolist[idx].finished)
     // setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))    
     checkTodo(idx)

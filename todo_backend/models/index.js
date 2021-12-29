@@ -1,7 +1,9 @@
 const mongoose = require("mongoose")
-require('dotenv').config({path: 'variables.env'});
+require('dotenv').config();
+
+console.log("url:",process.env.DB_URL)
+
 mongoose.connect(process.env.DB_URL, {
-  // connecting to the mongodb database 
   keepAlive: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,

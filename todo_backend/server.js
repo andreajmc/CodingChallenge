@@ -6,6 +6,8 @@ const HOST = process.env.HOST || '0.0.0.0';
 const db = require("./models/");
 const cors = require("cors");
 
+require('dotenv').config({path: 'variables.env'});
+
 
 app.use(cors());
 app.use(bodyParser.json());
