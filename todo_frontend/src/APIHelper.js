@@ -18,28 +18,14 @@ async function deleteinputTask(id) {
 async function updateinputState(id, toggle) {
   console.log(toggle)
   if (toggle) {
-    console.log("entra true")
-    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: false})
-    return newTodo
+    await axios.put(`${API_URL}${id}`, { finished: false })
   } else {
-    console.log("entra false")
-    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: true})
-    console.log(newTodo)
-    return newTodo
+    await axios.put(`${API_URL}${id}`, { finished: true })
   }
 }
-async function updateinputTask(id, toggle) {
-  console.log(toggle)
-  if (toggle) {
-    console.log("entra true")
-    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: false})
-    return newTodo
-  } else {
-    console.log("entra false")
-    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: true})
-    console.log(newTodo)
-    return newTodo
-  }
+async function updateinputTask(id, newTask) {
+  const { data: newTodo } = await axios.put(`${API_URL}${id}`, { todo: newTask })
+  return newTodo
 }
 
 async function getTodoList() {

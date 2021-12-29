@@ -20,8 +20,7 @@ function App() {
   };
 
   const handleModClose = () => {
-    console.log("close idx:", modidx)
-    console.log("new input", inputModValue)
+    clearModInput()
     editTodo(modidx, inputModValue)
     updateinputTask(modidx, inputModValue)
     setOpen(false);
@@ -67,11 +66,10 @@ function App() {
     } catch (err) { }
   }
 
-  const updateinputTask = async (idx) => {
+  const updateinputTask = async (idx, newTodo) => {
     try {
       const id = todolist[idx]._id;
-      console.log("idx", idx, "id", id)
-      const modTask = await APIHelper.updateinputTask(id, todolist[idx].finished)
+      const modTask = await APIHelper.updateinputTask(id, newTodo)
       console.log("modtask", modTask)
       setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))    
     } catch (err) {
@@ -81,8 +79,8 @@ function App() {
   const updateinputState = async (idx) => {
     const id = todolist[idx]._id;
       console.log("idx", idx, "id", id, "check:", todolist[idx].finished)
-      const modTask = await APIHelper.updateinputState(id, todolist[idx].finished)
-      setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))    
+      await APIHelper.updateinputState(id, todolist[idx].finished)
+      // setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))    
       checkTodo(idx) 
   }
 
@@ -146,6 +144,7 @@ function App() {
             margin="dense"
             id="upTask"
             label="Write your updated task here."
+            value={inputModValue}
             type="text"
             fullWidth
             variant="standard"
