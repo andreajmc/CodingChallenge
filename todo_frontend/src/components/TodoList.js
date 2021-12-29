@@ -3,7 +3,7 @@ import { List, Paper } from "@material-ui/core";
 
 import TodoListItem from "./TodoListItem";
 
-const TodoList = React.memo(({ items, onItemCheck, onItemRemove }) => (
+const TodoList = React.memo(({ items, onItemCheck, onItemRemove, onItemUpdate }) => (
   <>
     {items.length > 0 && (
       <Paper style={{ margin: 16 }}>
@@ -14,7 +14,8 @@ const TodoList = React.memo(({ items, onItemCheck, onItemRemove }) => (
               text = {todo.todo}
               key={`TodoItem.${idx}`}
               divider={idx !== items.length - 1}
-              onButtonClick={() => onItemRemove(idx)}
+              onDeleteClick={() => onItemRemove(idx)}
+              onUpdateClick={() => onItemUpdate(idx)}
               onCheckBoxToggle={() => onItemCheck(idx)}
             />
           ))}

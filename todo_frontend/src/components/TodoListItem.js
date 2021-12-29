@@ -11,15 +11,15 @@ import EditIcon from '@mui/icons-material/Edit';
 
 
 const TodoListItem = React.memo(
-  ({ text, divider, checked, onCheckBoxToggle, onButtonClick }) => (
+  ({ text, divider, checked, onCheckBoxToggle, onDeleteClick, onUpdateClick }) => (
     <ListItem divider={divider}>
       <Checkbox onClick={onCheckBoxToggle} checked={checked} disableRipple />
       <ListItemText primary={text} />
       <ListItemSecondaryAction>
-        <IconButton aria-label="Modify Todo" onClick={onButtonClick}>
+        <IconButton aria-label="Modify Todo" onClick={onUpdateClick}>
           <EditIcon />
         </IconButton>
-        <IconButton aria-label="Delete Todo" onClick={onButtonClick}>
+        <IconButton aria-label="Delete Todo" onClick={onDeleteClick}>
           <DeleteOutlined />
         </IconButton>
       </ListItemSecondaryAction>

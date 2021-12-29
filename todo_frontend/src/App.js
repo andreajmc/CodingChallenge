@@ -4,12 +4,26 @@ import { useInputValue, useTodos } from "./custom-hooks";
 import Layout from "./components/Layout";
 import AddTodo from "./components/AddTodo";
 import TodoList from "./components/TodoList";
-import { Button, ButtonGroup } from "@material-ui/core";
+import { Button, ButtonGroup, TextField } from "@material-ui/core";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 function App() {
   const [todolist, setTodoList] = useState({});
-  const [list, setList] = useState({});
+  const [open, setOpen] = useState(false);
+  const[ogText, setOgText] = useState("");
 
+  const handleClickOpen = () => {
+    setOpen(true);
+    setOgText("placeholder");
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchinputTaskAndSettodolist = async () => {
@@ -103,31 +117,51 @@ function App() {
 
   const clearSel = () => {
     for (var i = 0; i < todolist.length; i++) {
-      console.log(todolist[i].finished)
       if (todolist[i].finished)
         removeTodos(i);
     }
   }
 
   return (
-    <Layout>
-      <AddTodo
-        inputValue={inputValue}
-        onInputChange={changeInput}
-        onButtonClick={clearInputAndAddTodo}
-        onInputKeyPress={(event) => keyInput(event, clearInputAndAddTodo)}
-      />
-      <TodoList
-        items={todolist}
-        onItemCheck={checkTodo}
-        onItemRemove={removeTodos}
-        onItemEdit={editTodos}
-      />
-      <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
-        <Button onClick={clearSel}>Clear Selected</Button>
-        <Button onClick={clearAll}>Clear All</Button>
-      </ButtonGroup>
-    </Layout>
+    <>
+      <Layout>
+        <AddTodo
+          inputValue={inputValue}
+          onInputChange={changeInput}
+          onButtonClick={clearInputAndAddTodo}
+          onInputKeyPress={(event) => keyInput(event, clearInputAndAddTodo)}
+        />
+        <TodoList
+          items={todolist}
+          onItemCheck={checkTodo}
+          onItemRemove={removeTodos}
+          onItemUpdate={handleClickOpen}
+        />
+        <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
+          <Button onClick={clearSel}>Clear Selected</Button>
+          <Button onClick={clearAll}>Clear All</Button>
+        </ButtonGroup>
+      </Layout>
+
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Edit Task</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label={ogText}
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Save</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

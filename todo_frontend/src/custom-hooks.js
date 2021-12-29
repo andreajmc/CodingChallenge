@@ -45,28 +45,18 @@ export const useTodos = (initialValue = []) => {
     removeTodo: (idx) => {
       setTodos(todos.filter((_, index) => idx !== index));
     },
-    editTodo: (idx, text) => {
+    editTodo: (idx, text, status) => {
       if (text !== "") {
-        setTodos(
+        /*setTodos(
           todos.concat({
             text,
             checked: false
           })
-        );
+        );*/
+        if (text !== "") {
+          todos[idx] = {text, checked: status}
+        }
       }
     },
-    listTodos: (todolist) => {
-      for (let i = 0; i < todolist.length; i++) {
-        var todo = todolist[i]
-        var text = todo.text;
-        var finished = todo.finished;
-        setTodos(
-          todos.push({
-            text,
-            checked: finished
-          }))
-        console.log(todos)
-      }
-    }
   };
 };
