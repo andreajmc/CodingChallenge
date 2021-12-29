@@ -45,18 +45,11 @@ export const useTodos = (initialValue = []) => {
     removeTodo: (idx) => {
       setTodos(todos.filter((_, index) => idx !== index));
     },
-    editTodo: (idx, text, status) => {
-      if (text !== "") {
-        /*setTodos(
-          todos.concat({
-            text,
-            checked: false
-          })
-        );*/
+    editTodo: (idx, text) => {
+      console.log(text)
         if (text !== "") {
-          todos[idx] = {text, checked: status}
+          todos[idx] = {text, checked: false}
         }
-      }
     },
   };
 };

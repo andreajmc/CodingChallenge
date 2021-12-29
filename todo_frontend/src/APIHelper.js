@@ -15,8 +15,8 @@ async function deleteinputTask(id) {
   return message
 }
 
-async function updateinputTask(id, payload) {
-  const { data: newTodo } = await axios.put(`${API_URL}${id}`, payload)
+async function updateinputTask(id) {
+  const { data: newTodo } = await axios.put(`${API_URL}${id}`, false)
   return newTodo
 }
 

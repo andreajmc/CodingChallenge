@@ -8,20 +8,20 @@ import { Button, ButtonGroup, TextField } from "@material-ui/core";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 function App() {
   const [todolist, setTodoList] = useState({});
   const [open, setOpen] = useState(false);
-  const[ogText, setOgText] = useState("");
+  const [editID, seteditID] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
-    setOgText("placeholder");
   };
 
   const handleClose = () => {
+    editTodo(editID, inputValue)
+    updateinputTask(editID, inputValue)
     setOpen(false);
   };
 
@@ -29,11 +29,6 @@ function App() {
     const fetchinputTaskAndSettodolist = async () => {
       const newtodolist = await APIHelper.getTodoList()
       setTodoList(newtodolist)
-      /*  const newlist = []
-        for (var i = 0; i < newtodolist.length; i++) {
-          newlist.push({ text: newtodolist[i].todo, checked: newtodolist[i].finished })
-        };
-        setList(newlist)*/
       for (var i; i < todolist.length; i++) {
         addTodo(todolist[i].todo, todolist[i].finished)
       }
@@ -41,21 +36,6 @@ function App() {
     fetchinputTaskAndSettodolist()
 
   })
-
-  /* const loadList = async () => {
-     var list = []
-     const newtodolist = await APIHelper.getTodoList()
-     setTodoList(newtodolist)
-     console.log(newtodolist)
-     for (var i = 0; i < newtodolist.length; i++) {
-       addTodo({text: newtodolist[i].todo, finished: newtodolist[i].finished })
-     };
-     /*todolist.forEach(todo => {
-       list.push({text: todo.todo, finished: todo.finished})
-     });
-     console.log(list)
-     return list
-   }*/
 
   const createinputTask = async (inputTask) => {
     if (!inputTask) {
@@ -84,10 +64,7 @@ function App() {
   }
 
   const updateinputTask = async (id) => {
-    const payload = {
-      completed: !todolist.find(inputTask => inputTask._id === id).completed,
-    }
-    const modTask = await APIHelper.updateinputTask(id, payload)
+    const modTask = await APIHelper.updateinputTask(id)
     setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))
   }
 
@@ -104,10 +81,11 @@ function App() {
     deleteinputTask(idx);
   }
 
-  const editTodos = (idx, text) => {
-    editTodo(idx, text)
-    updateinputTask(idx, text)
-    handleClose();
+  const editTodos = (idx) => {
+    console.log(idx)
+    seteditID(idx)
+    handleClickOpen()
+    console.log("index",editID)
   }
 
   const clearAll = () => {
@@ -136,7 +114,7 @@ function App() {
           items={todolist}
           onItemCheck={checkTodo}
           onItemRemove={removeTodos}
-          onItemUpdate={handleClickOpen}
+          onItemUpdate={editTodos}
         />
         <ButtonGroup variant="text" color="warning" aria-label="text button group" style={{ marginLeft: "80%", marginBottom: "1%" }}>
           <Button onClick={clearSel}>Clear Selected</Button>
@@ -149,17 +127,19 @@ function App() {
         <DialogContent>
           <TextField
             autoFocus
+            inputValue={inputValue}
             margin="dense"
-            id="name"
-            label={ogText}
-            type="email"
+            id="upTask"
+            label="Update task"
+            type="text"
             fullWidth
             variant="standard"
+            onChange={changeInput}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={editTodos}>Save</Button>
+          <Button onClick={handleClose}>Save Changes</Button>
         </DialogActions>
       </Dialog>
     </>
