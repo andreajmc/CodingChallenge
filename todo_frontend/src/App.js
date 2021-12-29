@@ -107,6 +107,7 @@ function App() {
   const editTodos = (idx, text) => {
     editTodo(idx, text)
     updateinputTask(idx, text)
+    handleClose();
   }
 
   const clearAll = () => {
@@ -158,7 +159,7 @@ function App() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Save</Button>
+          <Button onClick={editTodos}>Save</Button>
         </DialogActions>
       </Dialog>
     </>

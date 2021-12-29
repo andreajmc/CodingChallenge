@@ -14,7 +14,6 @@ function success(res, payload) { // Valid request received
 
 app.get("/tasks", async (req, res, next) => { // List all tasks in the To Do List
     try {
-        console.log("aqui")
         const tasks = await db.Tasks.find({})
         return success(res, tasks)
     } catch (err) {
