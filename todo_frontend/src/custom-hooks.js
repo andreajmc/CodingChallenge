@@ -2,11 +2,14 @@ import { useState } from "react";
 
 export const useInputValue = (initialValue = "") => {
   const [inputValue, setInputValue] = useState(initialValue);
+  const [inputModValue, setInputModValue] = useState(initialValue);
 
   return {
-    inputValue,
+    inputValue, inputModValue,
     changeInput: (event) => setInputValue(event.target.value),
     clearInput: () => setInputValue(""),
+    changeModInput: (event) => setInputModValue(event.target.value),
+    clearModInput: () => setInputModValue(""),
     keyInput: (event, callback) => {
       if (event.which === 13 || event.keyCode === 13) {
         callback(inputValue);
@@ -45,10 +48,11 @@ export const useTodos = (initialValue = []) => {
     removeTodo: (idx) => {
       setTodos(todos.filter((_, index) => idx !== index));
     },
-    editTodo: (idx, text) => {
-      console.log(text)
+    editTodo: (idx, text, status) => {
         if (text !== "") {
-          todos[idx] = {text, checked: false}
+          var item = {text, checked: status}
+          setTodos(todos.splice(idx, 0, item))
+          setTodos(todos.filter((_, index) => idx !== index));
         }
     },
   };

@@ -13,17 +13,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 function App() {
   const [todolist, setTodoList] = useState({});
   const [open, setOpen] = useState(false);
-  const [editID, seteditID] = useState(0);
+  const [modidx, setModidx] = useState(0);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    editTodo(editID, inputValue)
-    updateinputTask(editID, inputValue)
+  const handleModClose = () => {
+    console.log("close idx:", modidx)
+    console.log("new input", inputModValue)
+    editTodo(modidx, inputModValue)
+    updateinputTask(modidx, inputModValue)
     setOpen(false);
   };
+  
+  const handleClose = () => {
+    setOpen(false)
+  }
 
   useEffect(() => {
     const fetchinputTaskAndSettodolist = async () => {
@@ -39,7 +45,6 @@ function App() {
 
   const createinputTask = async (inputTask) => {
     if (!inputTask) {
-      console.log("its empty")
       alert("Please write down a task to add.")
       return
     }
@@ -57,18 +62,31 @@ function App() {
   const deleteinputTask = async (idx) => {
     try {
       const id = todolist[idx]._id;
-      console.log(id)
       await APIHelper.deleteinputTask(id)
       setTodoList(todolist.filter(({ _id: i }) => id !== i))
     } catch (err) { }
   }
 
-  const updateinputTask = async (id) => {
-    const modTask = await APIHelper.updateinputTask(id)
-    setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))
+  const updateinputTask = async (idx) => {
+    try {
+      const id = todolist[idx]._id;
+      console.log("idx", idx, "id", id)
+      const modTask = await APIHelper.updateinputTask(id, todolist[idx].finished)
+      console.log("modtask", modTask)
+      setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))    
+    } catch (err) {
+    }
   }
 
-  const { inputValue, changeInput, clearInput, keyInput } = useInputValue();
+  const updateinputState = async (idx) => {
+    const id = todolist[idx]._id;
+      console.log("idx", idx, "id", id, "check:", todolist[idx].finished)
+      const modTask = await APIHelper.updateinputState(id, todolist[idx].finished)
+      setTodoList(todolist.map(inputTask => (inputTask._id === id ? modTask : inputTask)))    
+      checkTodo(idx) 
+  }
+
+  const { inputValue, inputModValue, changeInput, clearInput, keyInput, changeModInput, clearModInput } = useInputValue();
   const { addTodo, checkTodo, removeTodo, editTodo } = useTodos();
 
   const clearInputAndAddTodo = () => {
@@ -82,10 +100,8 @@ function App() {
   }
 
   const editTodos = (idx) => {
-    console.log(idx)
-    seteditID(idx)
+    setModidx(idx)
     handleClickOpen()
-    console.log("index",editID)
   }
 
   const clearAll = () => {
@@ -112,7 +128,7 @@ function App() {
         />
         <TodoList
           items={todolist}
-          onItemCheck={checkTodo}
+          onItemCheck={updateinputState}
           onItemRemove={removeTodos}
           onItemUpdate={editTodos}
         />
@@ -123,23 +139,22 @@ function App() {
       </Layout>
 
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit Task</DialogTitle>
+        <DialogTitle>Update Task</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
-            inputValue={inputValue}
             margin="dense"
             id="upTask"
-            label="Update task"
+            label="Write your updated task here."
             type="text"
             fullWidth
             variant="standard"
-            onChange={changeInput}
+            onChange={changeModInput}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Save Changes</Button>
+          <Button onClick={handleModClose}>Save Changes</Button>
         </DialogActions>
       </Dialog>
     </>

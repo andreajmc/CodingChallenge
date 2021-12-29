@@ -15,9 +15,31 @@ async function deleteinputTask(id) {
   return message
 }
 
-async function updateinputTask(id) {
-  const { data: newTodo } = await axios.put(`${API_URL}${id}`, false)
-  return newTodo
+async function updateinputState(id, toggle) {
+  console.log(toggle)
+  if (toggle) {
+    console.log("entra true")
+    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: false})
+    return newTodo
+  } else {
+    console.log("entra false")
+    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: true})
+    console.log(newTodo)
+    return newTodo
+  }
+}
+async function updateinputTask(id, toggle) {
+  console.log(toggle)
+  if (toggle) {
+    console.log("entra true")
+    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: false})
+    return newTodo
+  } else {
+    console.log("entra false")
+    const { data: newTodo } = await axios.put(`${API_URL}${id}`, {finished: true})
+    console.log(newTodo)
+    return newTodo
+  }
 }
 
 async function getTodoList() {
@@ -26,4 +48,4 @@ async function getTodoList() {
   return todolist
 }
 
-export default { createinputTask, deleteinputTask, updateinputTask, getTodoList }
+export default { createinputTask, deleteinputTask, updateinputTask, updateinputState, getTodoList }

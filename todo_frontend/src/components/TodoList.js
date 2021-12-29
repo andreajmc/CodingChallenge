@@ -12,6 +12,7 @@ const TodoList = React.memo(({ items, onItemCheck, onItemRemove, onItemUpdate })
             <TodoListItem
               {...todo}
               text = {todo.todo}
+              checked = {todo.finished}
               key={`TodoItem.${idx}`}
               divider={idx !== items.length - 1}
               onDeleteClick={() => onItemRemove(idx)}
