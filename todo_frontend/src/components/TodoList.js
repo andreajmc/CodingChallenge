@@ -11,6 +11,7 @@ const TodoList = React.memo(({ items, onItemCheck, onItemRemove }) => (
           {items.map((todo, idx) => (
             <TodoListItem
               {...todo}
+              text = {todo.todo}
               key={`TodoItem.${idx}`}
               divider={idx !== items.length - 1}
               onButtonClick={() => onItemRemove(idx)}

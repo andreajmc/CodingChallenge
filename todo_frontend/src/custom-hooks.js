@@ -18,16 +18,16 @@ export const useInputValue = (initialValue = "") => {
 };
 
 export const useTodos = (initialValue = []) => {
-  const [todos, setTodos] = useState(initialValue);
+  var [todos, setTodos] = useState(initialValue);
 
   return {
     todos,
-    addTodo: (text) => {
+    addTodo: (text, status) => {
       if (text !== "") {
         setTodos(
           todos.concat({
             text,
-            checked: false
+            checked: status
           })
         );
       }
@@ -45,8 +45,28 @@ export const useTodos = (initialValue = []) => {
     removeTodo: (idx) => {
       setTodos(todos.filter((_, index) => idx !== index));
     },
-    editTodo: (idx) => {
-      // here goes something
+    editTodo: (idx, text) => {
+      if (text !== "") {
+        setTodos(
+          todos.concat({
+            text,
+            checked: false
+          })
+        );
+      }
+    },
+    listTodos: (todolist) => {
+      for (let i = 0; i < todolist.length; i++) {
+        var todo = todolist[i]
+        var text = todo.text;
+        var finished = todo.finished;
+        setTodos(
+          todos.push({
+            text,
+            checked: finished
+          }))
+        console.log(todos)
+      }
     }
   };
 };
